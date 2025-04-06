@@ -50,7 +50,7 @@ publishing {
             pom {
                 name.set("Bean Reporter")
                 description.set("Spring Bean Info Reporter")
-                url.set("https://github.com/yourorg/bean-reporter")
+                url.set("https://github.com/bandalgomsu/BeanReporter")
 
                 licenses {
                     license {
@@ -61,15 +61,15 @@ publishing {
 
                 developers {
                     developer {
-                        id.set("go-soo")
-                        name.set("고수")
-                        email.set("soogenius@youremail.com")
+                        id.set("gomsu")
+                        name.set("gomsu")
+                        email.set("rhtn1128@gmail.com")
                     }
                 }
 
                 scm {
-                    url.set("https://github.com/yourorg/bean-reporter")
-                    connection.set("scm:git:https://github.com/yourorg/bean-reporter.git")
+                    url.set("https://github.com/bandalgomsu/BeanReporter")
+                    connection.set("scm:git:https://github.com/bandalgomsu/BeanReporter")
                 }
             }
         }
@@ -78,7 +78,6 @@ publishing {
     repositories {
         // Maven Central, OSSRH, GitHub Packages 등
         // Maven Central
-        mavenCentral()
         maven {
             name = "sonatype"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
