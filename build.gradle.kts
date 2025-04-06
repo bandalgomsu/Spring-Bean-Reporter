@@ -40,17 +40,17 @@ tasks.withType<Test> {
 
 publishing {
     publications {
-        create<MavenPublication>("beanReporter") {
+        create<MavenPublication>("Spring-Bean-Reporter") {
             from(components["java"])
 
-            groupId = "com.bean-reporter"
+            groupId = "com.spring-bean-reporter"
             artifactId = "bean-reporter"
             version = "1.0.0"
 
             pom {
-                name.set("Bean Reporter")
+                name.set("Spring-Bean-Reporter")
                 description.set("Spring Bean Info Reporter")
-                url.set("https://github.com/bandalgomsu/BeanReporter")
+                url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter.git")
 
                 licenses {
                     license {
@@ -68,8 +68,8 @@ publishing {
                 }
 
                 scm {
-                    url.set("https://github.com/bandalgomsu/BeanReporter")
-                    connection.set("scm:git:https://github.com/bandalgomsu/BeanReporter")
+                    url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter")
+                    connection.set("scm:git:https://github.com/bandalgomsu/Spring-Bean-Reporter")
                 }
             }
         }
