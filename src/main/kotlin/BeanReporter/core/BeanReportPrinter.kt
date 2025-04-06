@@ -1,6 +1,7 @@
 package BeanReporter.core
 
 import BeanReporter.starter.BeanInitializationTimer
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.SmartInitializingSingleton
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor
 import org.springframework.boot.ApplicationRunner
@@ -10,6 +11,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RestControllerAdvice
 
 class BeanReportPrinter {
     fun printFatBeans(graph: BeanGraph, fatBeanThreshold: Int = 6) {
@@ -59,9 +63,14 @@ class BeanReportPrinter {
                 || rawType?.isAnnotationPresent(SpringBootApplication::class.java) == true
                 || rawType?.isAnnotationPresent(Controller::class.java) == true
                 || rawType?.isAnnotationPresent(EventListener::class.java) == true
+                || rawType?.isAnnotationPresent(RestController::class.java) == true
+                || rawType?.isAnnotationPresent(RestControllerAdvice::class.java) == true
+                || rawType?.isAnnotationPresent(ControllerAdvice::class.java) == true
                 || rawType?.name?.startsWith("org.springframework.") == true
                 || rawType?.name?.contains("springframework") == true
+                || rawType?.name?.contains("springdoc") == true
                 || rawType?.methods?.any { it.isAnnotationPresent(Scheduled::class.java) } == true
+                || rawType?.methods?.any { it.isAnnotationPresent(PostConstruct::class.java) } == true
                 || rawType?.name?.contains("mbean", ignoreCase = true) == true
 
     }

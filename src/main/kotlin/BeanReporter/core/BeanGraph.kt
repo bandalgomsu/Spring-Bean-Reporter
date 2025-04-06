@@ -1,7 +1,7 @@
 package BeanReporter.core
 
 class BeanGraph(
-    private val nodes: MutableMap<String, BeanInfo> = mutableMapOf<String, BeanInfo>()
+    private val nodes: MutableMap<String, BeanInfo> = mutableMapOf()
 ) {
     fun add(bean: BeanInfo) {
         nodes[bean.name] = bean
@@ -9,7 +9,12 @@ class BeanGraph(
 
     fun findUnusedBeans(): List<BeanInfo> {
         val used = nodes.values.flatMap { it.dependencies }.toSet()
-        return nodes.values.filter { it.name !in used }
+
+        return nodes.values.filter { node ->
+            used.none { usedName ->
+                usedName == node.name || usedName.startsWith("${node.name}$$")
+            }
+        }
     }
 
     fun findFatBeans(threshold: Int = 6): List<BeanInfo> {
