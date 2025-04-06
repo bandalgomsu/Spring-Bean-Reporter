@@ -1,6 +1,6 @@
-package BeanReporter.starter
+package BeanReporter.core
 
-import BeanReporter.core.BeanGraph
+import BeanReporter.starter.BeanInitializationTimer
 import org.springframework.beans.factory.SmartInitializingSingleton
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor
 import org.springframework.boot.ApplicationRunner
@@ -19,11 +19,14 @@ class BeanReportPrinter {
         }
     }
 
-    fun printUnusedBeans(graph: BeanGraph) {
+    fun printUnusedBeans(graph: BeanGraph, includePackages: List<String>) {
 
         val unused = graph.findUnusedBeans()
 
-        val (exclusion, external) = unused.partition { isSpringFrameworkEntryPointBean(it.type) }
+        val (exclusion, external) = unused.partition {
+            !isIncludePackage(it.type, includePackages)
+            isSpringFrameworkEntryPointBean(it.type)
+        }
 
         println("\n📭 Unused Beans (possibly dead code):")
         if (external.isEmpty()) println(" - None")
@@ -38,8 +41,14 @@ class BeanReportPrinter {
 //        }
     }
 
-    fun isSpringFrameworkEntryPointBean(type: Class<*>): Boolean {
+    private fun isIncludePackage(type: Class<*>, includePackages: List<String>): Boolean {
+        val pkg = type.`package`?.name ?: return false
+        return includePackages.any { pkg.startsWith(it) }
+    }
+
+    private fun isSpringFrameworkEntryPointBean(type: Class<*>): Boolean {
         val rawType = type.takeIf { !it.name.contains("CGLIB") } ?: type.superclass
+
 
         return ApplicationRunner::class.java.isAssignableFrom(type)
                 || CommandLineRunner::class.java.isAssignableFrom(type)

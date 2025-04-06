@@ -1,7 +1,6 @@
 package BeanReporter.core
 
 import BeanReporter.starter.BeanInitializationTimer
-import BeanReporter.starter.BeanReportPrinter
 import BeanReporter.starter.BeanReportProperties
 import org.springframework.context.ApplicationContext
 
@@ -19,7 +18,7 @@ class BeanReporter(
         val printer = BeanReportPrinter()
 
         printer.printFatBeans(graph, properties.fatBeanDependencyThreshold)
-        printer.printUnusedBeans(graph)
+        printer.printUnusedBeans(graph, properties.includeBasePackages)
         printer.printCircularBean(graph)
         printer.printSlowBeans(timer, thresholdMs = properties.initThresholdMs)
     }

@@ -12,13 +12,18 @@ import org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(BeanReportProperties::class)
 class BeanReporterConfiguration(
     private val context: ApplicationContext,
-    private val beanInitializationTimer: BeanInitializationTimer,
-    private val beanReportProperties: BeanReportProperties,
+    private val properties: BeanReportProperties
 ) {
 
     @Bean
-    fun beanReporter(): BeanReporter {
-        return BeanReporter(context, beanInitializationTimer, beanReportProperties)
+    fun beanInitializationTimer(): BeanInitializationTimer {
+        return BeanInitializationTimer()
+    }
+
+    @Bean
+    fun beanReporter(
+    ): BeanReporter {
+        return BeanReporter(context, beanInitializationTimer(), properties)
     }
 
     @Bean

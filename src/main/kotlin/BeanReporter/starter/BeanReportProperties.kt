@@ -6,4 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class BeanReportProperties {
     var initThresholdMs: Long = 100
     var fatBeanDependencyThreshold: Int = 6
+    var includeBasePackages: MutableList<String> = mutableListOf()
 }
