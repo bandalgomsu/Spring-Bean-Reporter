@@ -1,13 +1,20 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
-    `maven-publish`
+    id("maven-publish")
+    signing
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
-group = "com"
+group = "io.github.bandalgomsu"
 version = "1.0.0"
+
+tasks.bootJar { enabled = false }
+tasks.jar { enabled = true }
 
 java {
     toolchain {
@@ -40,54 +47,42 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+mavenPublishing {
+    coordinates( // Coordinate(GAV)
+        groupId = "io.github.bandalgomsu",
+        artifactId = "spring-bean-reporter",
+        version = "1.0.0"
+    )
 
-publishing {
-    publications {
-        create<MavenPublication>("Spring-Bean-Reporter") {
-            from(components["java"])
+    pom {
+        name.set("spring-bean-reporter") // Project Name
+        description.set("Spring Bean Info Reporter") // Project Description
+        inceptionYear.set("2025") // 개시년도
+        url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter") // Project URL
 
-            groupId = "com.spring-bean-reporter"
-            artifactId = "spring-bean-reporter"
-            version = "1.0.0"
-
-            pom {
-                name.set("Spring-Bean-Reporter")
-                description.set("Spring Bean Info Reporter")
-                url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter.git")
-
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("gomsu")
-                        name.set("gomsu")
-                        email.set("rhtn1128@gmail.com")
-                    }
-                }
-
-                scm {
-                    url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter")
-                    connection.set("scm:git:https://github.com/bandalgomsu/Spring-Bean-Reporter")
-                }
+        licenses { // License Information
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
+        }
+
+        developers { // Developer Information
+            developer {
+                id.set("gomsu")
+                name.set("gomsu")
+                email.set("rhtn1128@gmail.com")
+            }
+        }
+
+        scm { // SCM Information
+            connection.set("scm:git:git://github.com/bandalgomsu/Spring-Bean-Reporter.git")
+            developerConnection.set("scm:git:ssh://github.com/bandalgomsu/Spring-Bean-Reporter.git")
+            url.set("https://github.com/bandalgomsu/Spring-Bean-Reporter")
         }
     }
 
-    repositories {
-        // Maven Central, OSSRH, GitHub Packages 등
-        // Maven Central
-        maven {
-            name = "sonatype"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = project.findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
-                password = project.findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
-            }
-        }
-    }
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications() // GPG/PGP 서명
 }
