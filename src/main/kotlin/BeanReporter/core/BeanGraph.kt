@@ -24,19 +24,14 @@ class BeanGraph(
     fun findCircularDependencies(): List<List<String>> {
         val visited = mutableSetOf<String>()
         val stack = mutableListOf<String>()
-        val result = mutableSetOf<List<String>>() // 중복 방지
+        val result = mutableListOf<List<String>>()
 
         fun dfs(bean: String) {
             if (bean in stack) {
                 val cycle = stack.dropWhile { it != bean } + bean
-
-                // 🔥 오탐 방지: 자기 자신만 참조하는 순환은 제외
-                if (cycle.toSet().size > 1) {
-                    result += cycle
-                }
+                result.add(cycle)
                 return
             }
-
             if (bean in visited) return
             visited += bean
             stack += bean
@@ -45,7 +40,6 @@ class BeanGraph(
         }
 
         nodes.keys.forEach { dfs(it) }
-        return result.toList()
+        return result.distinct()
     }
-
 }
