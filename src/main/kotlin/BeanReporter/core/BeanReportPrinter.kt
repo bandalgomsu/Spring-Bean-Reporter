@@ -28,8 +28,7 @@ class BeanReportPrinter {
         val unused = graph.findUnusedBeans()
 
         val (exclusion, external) = unused.partition {
-            !isIncludePackage(it.type, includePackages)
-            isSpringFrameworkEntryPointBean(it.type)
+            !isIncludePackage(it.type, includePackages) || isSpringFrameworkEntryPointBean(it.type)
         }
 
         println("\n📭 Unused Beans (possibly dead code):")
