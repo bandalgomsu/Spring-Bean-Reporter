@@ -16,9 +16,14 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 class BeanReportPrinter {
-    fun printFatBeans(graph: BeanGraph, fatBeanThreshold: Int = 6) {
+    fun printFatBeans(graph: BeanGraph, fatBeanThreshold: Int = 6, includePackages: List<String>) {
         println("\n📦 Fat Beans (dependencies ≥ ${fatBeanThreshold}):")
-        graph.findFatBeans(fatBeanThreshold).forEach {
+
+        val fatBean = graph.findFatBeans(fatBeanThreshold)
+
+        val (target, external) = fatBean.partition { isIncludePackage(it.type, includePackages) }
+
+        target.forEach {
             println(" - ${it.name} (${it.dependencies.size}): ${it.dependencies.joinToString()}")
         }
     }
@@ -27,13 +32,13 @@ class BeanReportPrinter {
 
         val unused = graph.findUnusedBeans()
 
-        val (exclusion, external) = unused.partition {
-            !isIncludePackage(it.type, includePackages) || isSpringFrameworkEntryPointBean(it.type)
+        val (external, target) = unused.partition {
+            !isIncludePackage(it.type, includePackages) || isExternal(it.type)
         }
 
         println("\n📭 Unused Beans (possibly dead code):")
-        if (external.isEmpty()) println(" - None")
-        else external.forEach {
+        if (target.isEmpty()) println(" - None")
+        else target.forEach {
             println(" - ${it.name} (${it.packageName}.${it.type.simpleName})")
         }
 
@@ -44,14 +49,38 @@ class BeanReportPrinter {
 //        }
     }
 
+    fun printCircularBean(graph: BeanGraph, includePackages: List<String>) {
+        println("\n♻️ Circular Dependencies:")
+        val circularBean = graph.findCircularDependencies()
+
+        circularBean.forEach {
+            println(" - ${it.joinToString(" -> ")}")
+        }
+    }
+
+    fun printSlowBeans(timer: BeanInitializationTimer, thresholdMs: Long = 100) {
+        println("\n🐢 Slow Bean Initializations (>${thresholdMs}ms):")
+        val slowBeans = timer.getInitializationDurations()
+            .filter { it.value >= thresholdMs }
+            .toList()
+            .sortedByDescending { it.second }
+
+        if (slowBeans.isEmpty()) {
+            println(" - None")
+        } else {
+            slowBeans.forEach { (name, ms) ->
+                println(" - $name : ${ms}ms")
+            }
+        }
+    }
+
     private fun isIncludePackage(type: Class<*>, includePackages: List<String>): Boolean {
         val pkg = type.`package`?.name ?: return false
         return includePackages.any { pkg.startsWith(it) }
     }
 
-    private fun isSpringFrameworkEntryPointBean(type: Class<*>): Boolean {
+    private fun isExternal(type: Class<*>): Boolean {
         val rawType = type.takeIf { !it.name.contains("CGLIB") } ?: type.superclass
-
 
         return ApplicationRunner::class.java.isAssignableFrom(type)
                 || CommandLineRunner::class.java.isAssignableFrom(type)
@@ -71,29 +100,5 @@ class BeanReportPrinter {
                 || rawType?.methods?.any { it.isAnnotationPresent(Scheduled::class.java) } == true
                 || rawType?.methods?.any { it.isAnnotationPresent(PostConstruct::class.java) } == true
                 || rawType?.name?.contains("mbean", ignoreCase = true) == true
-
-    }
-
-    fun printCircularBean(graph: BeanGraph) {
-        println("\n♻️ Circular Dependencies:")
-        graph.findCircularDependencies().forEach {
-            println(" - ${it.joinToString(" -> ")}")
-        }
-    }
-
-    fun printSlowBeans(timer: BeanInitializationTimer, thresholdMs: Long = 100) {
-        println("\n🐢 Slow Bean Initializations (>${thresholdMs}ms):")
-        val slowBeans = timer.getInitializationDurations()
-            .filter { it.value >= thresholdMs }
-            .toList()
-            .sortedByDescending { it.second }
-
-        if (slowBeans.isEmpty()) {
-            println(" - None")
-        } else {
-            slowBeans.forEach { (name, ms) ->
-                println(" - $name : ${ms}ms")
-            }
-        }
     }
 }

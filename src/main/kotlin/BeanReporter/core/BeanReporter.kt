@@ -17,9 +17,9 @@ class BeanReporter(
         val graph = BeanAnalyzer().buildGraph(context)
         val printer = BeanReportPrinter()
 
-        printer.printFatBeans(graph, properties.fatBeanDependencyThreshold)
+        printer.printFatBeans(graph, properties.fatBeanDependencyThreshold, properties.includeBasePackages)
         printer.printUnusedBeans(graph, properties.includeBasePackages)
-        printer.printCircularBean(graph)
+        printer.printCircularBean(graph, properties.includeBasePackages)
         printer.printSlowBeans(timer, thresholdMs = properties.initThresholdMs)
     }
 }
