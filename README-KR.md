@@ -11,7 +11,42 @@
 3. CircularBean (순환참조 Bean)
 4. SlowBean (초기화가 오래 걸리는 Bean)
 
+### 실행 화면
+
+```
+🚀 Bean Reporter Start !!
+
+🧠 Spring Bean Structure Analysis Results
+
+📦 Fat Beans (dependencies ≥ 6):
+
+📭 Unused Beans (possibly dead code):
+
+♻️ Circular Dependencies:
+
+🐢 Slow Bean Initializations (>1000ms):
+```
+
 ## 사용 방법
+
+### Dependency
+
+Maven
+
+```jsx
+<dependency>
+    <groupId>io.github.bandalgomsu</groupId>
+    <artifactId>spring-bean-reporter</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
+Gradle
+
+```jsx
+implementation
+'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
+```
 
 ### Annotaion
 
@@ -24,6 +59,18 @@
 ### Custom Configuration
 
 .yml(or .properties) 을 통해서 slow bean 기준 , fat bean 기준, 탐색할 패키지를 설정 할 수 있습니다.
+
+.yml
+
+```jsx
+bean:
+    report:
+        initThresholdMs: 100 //default = 100
+fatBeanDependencyThreshold: 6 // default = 6
+includeBasePackages: "com.my-project" // default = 전체 패키지
+```
+
+.properties
 
 ```jsx
 bean:
