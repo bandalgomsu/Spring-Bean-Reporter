@@ -36,7 +36,7 @@ recommended.
 
 Maven
 
-```jsx
+```
 <dependency>
     <groupId>io.github.bandalgomsu</groupId>
     <artifactId>spring-bean-reporter</artifactId>
@@ -46,9 +46,8 @@ Maven
 
 Gradle
 
-```jsx
-implementation
-'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
+```
+implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
 ```
 
 ### Annotaion
@@ -65,20 +64,20 @@ You can customize thresholds and scanning packages via .yml(or .properties)
 
 .yml
 
-```jsx
+```
 bean:
     report:
         initThresholdMs: 100 //default = 100
 fatBeanDependencyThreshold: 6 // default = 6
-includeBasePackages: "com.my-project" // default = 전체 패키지
+includeBasePackages: "com.my-project" // default = all pacakage
 ```
 
 .properties
 
-```jsx
-bean.report.init - threshold - ms = 100
-bean.report.fat - bean - dependency - threshold = 6
-bean.report.include - base - packages = "com.my-project"
+```
+bean.report.init-threshold-ms=1000
+bean.report.fat-bean-dependency-threshold=6
+bean.report.include-base-packages=com.example
 ```
 
 ## Contribute
