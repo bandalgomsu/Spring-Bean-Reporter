@@ -47,7 +47,7 @@ mavenPublishing {
     coordinates( // Coordinate(GAV)
         groupId = "io.github.bandalgomsu",
         artifactId = "spring-bean-reporter",
-        version = "1.0.0"
+        version = "1.0.1"
     )
 
     pom {
