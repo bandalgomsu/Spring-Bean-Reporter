@@ -10,9 +10,9 @@ class BeanReporter(
     private val properties: BeanReportProperties
 ) {
     fun reportBeans() {
-        println("🚀 Bean Reporter 실행 시작")
+        println("🚀 Bean Reporter Start !!")
 
-        println("\n🧠 Spring Bean 구조 분석 결과")
+        println("\n🧠 Spring Bean Structure Analysis Results")
 
         val graph = BeanAnalyzer().buildGraph(context)
         val printer = BeanReportPrinter()
