@@ -72,7 +72,7 @@ bean:
     report:
         initThresholdMs: 100 //default = 100
         fatBeanDependencyThreshold: 6 // default = 6
-        includeBasePackages: "com.my-project" // default = all pacakage
+        includeBasePackages: ["com.my-project"] // default = all pacakage
         dependencyTreeTargetBeansName : ["sampleController" , "sampleService"]
 ```
 
@@ -81,7 +81,8 @@ bean:
 ```
 bean.report.init-threshold-ms=1000
 bean.report.fat-bean-dependency-threshold=6
-bean.report.include-base-packages=com.example
+bean.report.include-base-packages=["com.example"]
+bean.report.dependencyTreeTargetBeansName = ["sampleController" , "sampleService"]
 ```
 
 ## Contribute
