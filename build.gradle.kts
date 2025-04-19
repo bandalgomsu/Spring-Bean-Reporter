@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "io.github.bandalgomsu"
-version = "1.0.0"
+version = "1.0.2"
 
 tasks.bootJar { enabled = false }
 tasks.jar { enabled = true }
@@ -47,7 +47,7 @@ mavenPublishing {
     coordinates( // Coordinate(GAV)
         groupId = "io.github.bandalgomsu",
         artifactId = "spring-bean-reporter",
-        version = "1.0.1"
+        version = "1.0.2"
     )
 
     pom {
