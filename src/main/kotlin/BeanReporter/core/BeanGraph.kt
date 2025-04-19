@@ -47,4 +47,26 @@ class BeanGraph(
         nodes.keys.forEach { dfs(it) }
         return result.toList()
     }
+
+    fun findDependencyTreeByTargetBean(targetBean: String): String {
+        val sb = StringBuilder()
+        val visited = mutableSetOf<String>()
+
+        fun dfs(beanName: String, depth: Int) {
+            if (beanName in visited) return
+            visited += beanName
+
+            val indent = "    ".repeat(depth)
+            sb.appendLine("$indent└─ $beanName")
+
+            nodes[beanName]?.dependencies?.forEach {
+                dfs(it, depth + 1)
+            }
+        }
+
+        dfs(targetBean, 0)
+        return sb.toString()
+    }
+
+
 }

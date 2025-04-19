@@ -9,7 +9,8 @@
 1. FatBean (의존성이 많은 Bean)
 2. UnusedBean (사용하지 않는 Bean)
 3. CircularBean (순환참조 Bean)
-4. SlowBean (초기화가 오래 걸리는 Bean)
+4. Target Bean Dependency Tree (타겟 Bean 들의 의존성 트리)
+5. SlowBean (초기화가 오래 걸리는 Bean)
 
 ### 실행 화면
 
@@ -21,6 +22,8 @@
 📦 Fat Beans (dependencies ≥ 6):
 
 📭 Unused Beans (possibly dead code):
+
+🌲 Target Bean Dependency Tree:
 
 ♻️ Circular Dependencies:
 
@@ -37,14 +40,14 @@ Maven
 <dependency>
     <groupId>io.github.bandalgomsu</groupId>
     <artifactId>spring-bean-reporter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 Gradle
 
 ```
-implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
+implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.2'
 ```
 
 ### Annotaion
@@ -65,8 +68,9 @@ implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
 bean:
     report:
         initThresholdMs: 100 //default = 100
-fatBeanDependencyThreshold: 6 // default = 6
-includeBasePackages: "com.my-project" // default = all pacakage
+        fatBeanDependencyThreshold: 6 // default = 6
+        includeBasePackages: "com.my-project" // default = all pacakage
+        dependencyTreeTargetBeansName : ["sampleController" , "sampleService"]
 ```
 
 .properties
@@ -75,6 +79,7 @@ includeBasePackages: "com.my-project" // default = all pacakage
 bean.report.init-threshold-ms=1000
 bean.report.fat-bean-dependency-threshold=6
 bean.report.include-base-packages=com.example
+bean.report.dependencyTreeTargetBeansName = ["sampleController" , "sampleService"]
 ```
 
 ## 기여하기

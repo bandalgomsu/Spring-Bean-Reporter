@@ -58,6 +58,15 @@ class BeanReportPrinter {
         }
     }
 
+    fun printRootBeansDependencyTree(graph: BeanGraph, targetBeansName: List<String>) {
+        println("\n\uD83C\uDF32 Target Bean Dependency Tree:")
+
+        targetBeansName.forEach {
+            println("$it Dependency Tree")
+            println(graph.findDependencyTreeByTargetBean(it))
+        }
+    }
+
     fun printSlowBeans(timer: BeanInitializationTimer, thresholdMs: Long = 100) {
         println("\n🐢 Slow Bean Initializations (>${thresholdMs}ms):")
         val slowBeans = timer.getInitializationDurations()

@@ -12,7 +12,8 @@ recommended.
 1. FatBean – Beans with too many dependencies
 2. UnusedBean – Beans that are not used anywhere
 3. CircularBean – Beans involved in circular dependencies
-4. SlowBean – Beans that take a long time to initialize
+4. Target Bean Dependency Tree - Target Beans Dependency Tree
+5. SlowBean – Beans that take a long time to initialize
 
 ### Execution View
 
@@ -24,6 +25,8 @@ recommended.
 📦 Fat Beans (dependencies ≥ 6):
 
 📭 Unused Beans (possibly dead code):
+
+🌲 Target Bean Dependency Tree:
 
 ♻️ Circular Dependencies:
 
@@ -40,14 +43,14 @@ Maven
 <dependency>
     <groupId>io.github.bandalgomsu</groupId>
     <artifactId>spring-bean-reporter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 Gradle
 
 ```
-implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.1'
+implementation 'io.github.bandalgomsu:spring-bean-reporter:1.0.2'
 ```
 
 ### Annotaion
@@ -68,8 +71,9 @@ You can customize thresholds and scanning packages via .yml(or .properties)
 bean:
     report:
         initThresholdMs: 100 //default = 100
-fatBeanDependencyThreshold: 6 // default = 6
-includeBasePackages: "com.my-project" // default = all pacakage
+        fatBeanDependencyThreshold: 6 // default = 6
+        includeBasePackages: "com.my-project" // default = all pacakage
+        dependencyTreeTargetBeansName : ["sampleController" , "sampleService"]
 ```
 
 .properties

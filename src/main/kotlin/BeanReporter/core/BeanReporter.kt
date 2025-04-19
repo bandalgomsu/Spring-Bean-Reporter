@@ -20,6 +20,7 @@ class BeanReporter(
         printer.printFatBeans(graph, properties.fatBeanDependencyThreshold, properties.includeBasePackages)
         printer.printUnusedBeans(graph, properties.includeBasePackages)
         printer.printCircularBean(graph, properties.includeBasePackages)
+        printer.printRootBeansDependencyTree(graph, properties.dependencyTreeTargetBeansName)
         printer.printSlowBeans(timer, thresholdMs = properties.initThresholdMs)
     }
 }
